@@ -13,12 +13,21 @@ function Creature(species, name, gender, legs, hands, saying) {
   this.hands = hands;
   this.saying = saying;
 
-  this.properties = ["species", "name", "gender", "legs", "hands", "saying"];
+  this.properties = [
+    "species",
+    "name",
+    "gender",
+    "legs",
+    "hands",
+    "saying",
+    "friendsNames",
+  ];
 
   this.display = function () {
     if (this.friends) {
       this.friendsNames = this.friends.map((friend) => friend.name).join(", ");
-      this.properties.push("friendsNames");
+    } else {
+      this.friendsNames = "undefined :(";
     }
     print(this.properties.map((prop) => this[prop]).join("; "));
   };
