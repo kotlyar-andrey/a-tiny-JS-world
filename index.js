@@ -6,71 +6,101 @@
    */
 
 class Creature {
-  constructor(species, name, gender, legs, hands, phrase, linkTo = null) {
+  constructor(species, name, gender, phrase) {
     this._species = species;
     this._name = name;
     this._gender = gender;
-    this._legs = legs;
-    this._hands = hands;
     this._phrase = phrase;
     this._friends = [];
-    this._link = linkTo;
-    this._properties = [
-      "species",
-      "_name",
-      "_gender",
-      "_legs",
-      "_hands",
-      "saying",
-      "friends",
-    ];
+    this._properties = ["_species", "_name", "_gender", "saying"];
   }
 
-  get species() {
-    return this._link
-      ? `${this._species}-${this._link._species}`
-      : this._species;
-  }
-
-  get friends() {
+  getFriends() {
     return this._friends && this._friends.length > 0
-      ? this._friends.map(friend => friend._name).join(", ")
+      ? this._friends.map((friend) => friend._name).join(", ")
       : "no friends";
   }
 
-  set friends(newFriends) {
+  setFriends(newFriends) {
     this._friends = [...newFriends];
   }
 
-  get saying() {
-    return this._link ? this._link._phrase : this._phrase;
+  getSaying() {
+    return self._phrase;
   }
 
-  set saying(newFrase) {
-    this._phrase = newFrase;
+  setSaying(newPhrase) {
+    this._phrase = newPhrase;
+  }
+
+  addProperties(...newProperties) {
+    this._properties = [...this._properties, ...newProperties];
   }
 
   display() {
-    print(this._properties.map(prop => this[prop]).join("; "));
+    const friends = this.getFriends();
+    print(
+      this._properties
+        .map((prop) => this[prop])
+        .join("; ")
+        .concat(`; ${friends}`)
+    );
   }
 }
 
-const cat = new Creature("cat", "Jerry", "male", 4, 0, "Myau");
-const dog = new Creature("dog", "Bars", "male", 4, 0, "Woof");
-const woman = new Creature("human", "Maria", "female", 2, 2, "Hi");
-const man = new Creature("human", "Ivan", "male", 2, 2, "Hello");
-const woman_cat = new Creature("human", "Marta", "female", 2, 2, "", cat);
-const werewolf = new Creature("human", "Petr", "male", 4, 2, "", dog);
+class HomoSapiens extends Creature {
+  constructor(species, name, gender, phrase, legs, hands) {
+    super(species, name, gender, phrase);
+    this._legs = legs;
+    this._hands = hands;
+    this.addProperties("_legs", "_hands");
+  }
 
-man.friends = [woman, cat, dog];
-woman.friends = [man, cat];
-dog.friends = [cat];
-woman_cat.friends = [man, cat];
+  get saying() {
+    return this._phrase;
+  }
+}
 
-cat.saying = "new message for test woman-cats";
+class Animal extends Creature {
+  constructor(species, name, gender, phrase, paws, wings) {
+    super(species, name, gender, phrase);
+    this._paws = paws;
+    this._wings = wings;
+    this.addProperties("_paws", "_wings");
+  }
 
-const inhabitants = [man, woman, dog, cat, woman_cat, werewolf];
+  get saying() {
+    return this._phrase;
+  }
+}
 
-inhabitants.forEach(creature => {
+class Anomaly extends HomoSapiens {
+  constructor(species, name, gender, phrase, legs, hands, linkTo) {
+    super(species, name, gender, phrase, legs, hands);
+    this._linkTo = linkTo;
+  }
+  get saying() {
+    return this._linkTo._phrase;
+  }
+}
+
+const man = new HomoSapiens("human", "Ivan", "male", "Hello", 2, 2);
+const woman = new HomoSapiens("human", "Maria", "female", "Hi", 2, 2);
+const dog = new Animal("dog", "Bars", "male", "Woof", 4, 0);
+const cat = new Animal("cat", "Jerry", "male", "Myau", 4, 0);
+const parrot = new Animal("parrot", "Kuzya", "male", "How are you?", 2, 2);
+const woman_cat = new Anomaly("woman-cat", "Marta", "female", "", 2, 2, cat);
+const man_parrot = new Anomaly("man-parrot", "Petr", "male", "", 2, 2, parrot);
+
+man.setFriends([woman, cat, dog]);
+woman.setFriends([man, cat]);
+dog.setFriends([cat]);
+woman_cat.setFriends([man, cat]);
+
+cat.setSaying("Hello, it's me, your cat");
+
+const inhabitants = [man, woman, dog, cat, parrot, woman_cat, man_parrot];
+
+inhabitants.forEach((creature) => {
   creature.display();
 });
