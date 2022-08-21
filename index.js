@@ -86,7 +86,7 @@ const man = new HomoSapiens("Ivan", "male", "Hello", 2, 2);
 const woman = new HomoSapiens("Maria", "female", "Hi", 2, 2);
 const dog = new Animal("dog", "Bars", "male", "Woof", 4, 0);
 const cat = new Animal("cat", "Jerry", "male", "Myau", 4, 0);
-const parrot = new Animal("parrot", "Kuzya", "male", "How are you?", 2, 2);
+const parrot = new Animal("parrot", "Kuzya", "male", "How are you?", 2, 0);
 const woman_cat = new Anomaly("Marta", "female", "", 2, 2, cat);
 const man_parrot = new Anomaly("Petr", "male", "", 2, 2, parrot);
 
