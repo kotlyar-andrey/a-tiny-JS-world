@@ -40,15 +40,18 @@ class Creature {
     this._properties = [...this._properties, ...newProperties];
   }
 
-  display() {
+  getPropertiesData() {
+    return this._properties.map(prop => this[prop]).join("; ");
+  }
+
+  getAnotherData() {
     const friends = this.getFriends();
     const saying = this.getSaying();
-    print(
-      this._properties
-        .map(prop => this[prop])
-        .join("; ")
-        .concat(`; ${saying}; ${friends}`)
-    );
+    return `; ${friends}; ${saying}`;
+  }
+
+  getInfo() {
+    return this.getPropertiesData() + this.getAnotherData();
   }
 }
 
@@ -129,5 +132,5 @@ cat.setSaying("Hello, it's me, your cat");
 const inhabitants = [man, woman, dog, cat, parrot, woman_cat, man_parrot];
 
 inhabitants.forEach(creature => {
-  creature.display();
+  print(creature.getInfo());
 });
